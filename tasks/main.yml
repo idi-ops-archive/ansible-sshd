@@ -1,0 +1,27 @@
+---
+
+- name: Copy configuration file
+  template:
+    src: sshd_config.j2
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: '0600'
+    backup: yes
+  register: sshd_config_copy
+
+- name: Verify configuration before restarting daemon
+  command: /usr/sbin/sshd -t
+  register: ssh_test
+  failed_when: ssh_test.rc != 0
+  notify:
+    - restart sshd
+
+- name: Reset SELinux ssh_port_t list
+  command: "/usr/sbin/semanage port -D ssh_port_t"
+  when: ansible_selinux.status == "enabled"
+
+- name: Update ssh_port_t with additional ports
+  command: "/usr/sbin/semanage port -a -t ssh_port_t -p tcp {{ item }}"
+  with_items: '{{ sshd_ports }}'
+  when: ansible_selinux.status == "enabled" and sshd_ports|difference([22])

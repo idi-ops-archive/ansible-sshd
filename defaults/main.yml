@@ -1,0 +1,19 @@
+---
+sshd_protocol: 2
+sshd_ports: [ 22 ]
+
+sshd_sftp_only_groups: []
+
+sshd_permit_root: yes
+sshd_password_auth: yes
+sshd_challenge_response_auth: yes
+sshd_gssapi_auth: yes
+sshd_gssapi_cleanup_credentials: yes
+
+sshd_maxstartups: "10:30:100"
+
+sshd_use_dns: yes 
+sshd_use_pam: yes
+sshd_x11_forwarding: yes
+sshd_print_motd: yes
+sshd_log_level: 'VERBOSE'

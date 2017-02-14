@@ -1,0 +1,65 @@
+Protocol {{ sshd_protocol }}
+
+{% for item in sshd_ports %}
+Port {{ item }}
+{% endfor %}
+
+{% if sshd_listen_ips is defined %}
+{% for item in sshd_listen_ips %}
+ListenAddress {{ item }}
+{% endfor %}
+{% endif %}
+
+{% if sshd_allowusers is defined %}
+{% for item in sshd_allowusers %}
+AllowUsers {{ item }}
+{% endfor %}
+{% endif %}
+
+HostKey /etc/ssh/ssh_host_rsa_key
+HostKey /etc/ssh/ssh_host_ecdsa_key
+HostKey /etc/ssh/ssh_host_ed25519_key
+SyslogFacility AUTHPRIV
+AuthorizedKeysFile  .ssh/authorized_keys
+
+PermitRootLogin {% if sshd_permit_root %}yes{% else %}no{% endif %}
+
+PasswordAuthentication {% if sshd_password_auth %}yes{% else %}no{% endif %}
+
+ChallengeResponseAuthentication {% if sshd_challenge_response_auth %}yes{% else %}no{% endif %}
+
+GSSAPIAuthentication {% if sshd_gssapi_auth %}yes{% else %}no{% endif %}
+
+GSSAPICleanupCredentials {% if sshd_gssapi_cleanup_credentials %}yes{% else %}no{% endif %}
+
+
+
+UseDNS {% if sshd_use_dns %}yes{% else %}no{% endif %}
+
+UsePAM {% if sshd_use_pam %}yes{% else %}no{% endif %}
+
+X11Forwarding {% if sshd_x11_forwarding %}yes{% else %}no{% endif %}
+
+PrintMotd {% if sshd_print_motd %}yes{% else %}no{% endif %}
+
+LogLevel {{ sshd_log_level }}
+
+MaxStartups {{ sshd_maxstartups }}
+
+
+UsePrivilegeSeparation sandbox
+
+AcceptEnv LANG LC_CTYPE LC_NUMERIC LC_TIME LC_COLLATE LC_MONETARY LC_MESSAGES
+AcceptEnv LC_PAPER LC_NAME LC_ADDRESS LC_TELEPHONE LC_MEASUREMENT
+AcceptEnv LC_IDENTIFICATION LC_ALL LANGUAGE
+AcceptEnv XMODIFIERS
+
+Subsystem sftp internal-sftp
+
+{% for sftp_group in sshd_sftp_only_groups %}
+Match Group {{ sftp_group }}
+        AllowTCPForwarding no
+        X11Forwarding no
+        ForceCommand internal-sftp
+#        ChrootDirectory %h
+{% endfor %}
