@@ -1,5 +1,11 @@
 ---
 
+- name: Install packages
+  package:
+    name: '{{ item }}'
+    state: present
+  with_items: '{{ sshd_packages }}'
+
 - name: Copy configuration file
   template:
     src: sshd_config.j2
@@ -8,20 +14,16 @@
     group: root
     mode: '0600'
     backup: yes
-  register: sshd_config_copy
-
-- name: Verify configuration before restarting daemon
-  command: /usr/sbin/sshd -t
-  register: ssh_test
-  failed_when: ssh_test.rc != 0
   notify:
     - restart sshd
 
-- name: Reset SELinux ssh_port_t list
-  command: "/usr/sbin/semanage port -D ssh_port_t"
-  when: ansible_selinux.status == "enabled"
+- name: Validate configuration file is healthy
+  command: /usr/sbin/sshd -t
+  changed_when: false
 
-- name: Update ssh_port_t with additional ports
-  command: "/usr/sbin/semanage port -a -t ssh_port_t -p tcp {{ item }}"
-  with_items: '{{ sshd_ports }}'
-  when: ansible_selinux.status == "enabled" and sshd_ports|difference([22])
+- name: Add port to SELinux ssh_port_t
+  seport:
+    ports: '{{ sshd_port }}'
+    proto: tcp
+    setype: ssh_port_t
+    state: present

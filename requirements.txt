@@ -1,0 +1,4 @@
+ansible-lint
+docker-py
+flake8
+molecule

@@ -1,20 +1,13 @@
-Protocol {{ sshd_protocol }}
+Protocol 2
+Port {{ sshd_port }}
 
-{% for item in sshd_ports %}
-Port {{ item }}
-{% endfor %}
-
-{% if sshd_listen_ips is defined %}
-{% for item in sshd_listen_ips %}
+{% for item in sshd_listen_addresses %}
 ListenAddress {{ item }}
 {% endfor %}
-{% endif %}
 
-{% if sshd_allowusers is defined %}
 {% for item in sshd_allowusers %}
 AllowUsers {{ item }}
 {% endfor %}
-{% endif %}
 
 HostKey /etc/ssh/ssh_host_rsa_key
 HostKey /etc/ssh/ssh_host_ecdsa_key
