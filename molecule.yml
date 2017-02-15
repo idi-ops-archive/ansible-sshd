@@ -9,8 +9,8 @@ vagrant:
     - name: virtualbox
       type: virtualbox
       options:
-        memory: 512
-        cpus: 2
+        memory: 256
+        cpus: 1
   instances:
     - name: ansible-sshd
 verifier:
