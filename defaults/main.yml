@@ -37,7 +37,6 @@ sshd_use_dns: no
 sshd_use_pam: yes
 
 # Allow X11 forwarding over SSH
-
 sshd_x11_forwarding: no
 
 # Print /etc/motd when user logs in interactively
