@@ -24,7 +24,7 @@ sshd_challenge_response_auth: no
 # Whether user authentication based on GSSAPI is allowed (needed for Kerberos)
 sshd_gssapi_auth: no
 
-# Destroy user's credentials on logout
+# Destroy user's GSSAPI credentials on logout
 sshd_gssapi_cleanup_credentials: no
 
 # Maximum concurrent unauthenticated connections (start:rate:full)
