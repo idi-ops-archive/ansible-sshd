@@ -27,7 +27,7 @@ def test_sshd_process(Process):
     assert len(p) >= 1
 
 
-# FIX: Port to be tested should be retrieve from Ansible variables
+# FIX: Port to be tested should be retrieved from Ansible variables
 def test_sshd_socket(Socket):
     s = Socket("tcp://0.0.0.0:22")
 
