@@ -27,3 +27,9 @@
     proto: tcp
     setype: ssh_port_t
     state: present
+
+- name: Enable sshd service
+  service:
+    name: sshd
+    enabled: yes
+    state: started
