@@ -28,7 +28,7 @@
     setype: ssh_port_t
     state: present
 
-- name: Enable sshd service
+- name: Enable and start sshd service
   service:
     name: sshd
     enabled: yes
