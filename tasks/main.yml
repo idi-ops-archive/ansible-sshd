@@ -19,6 +19,7 @@
 
 - name: Validate configuration file is healthy
   command: /usr/sbin/sshd -t
+  check_mode: no # force task to run even in check mode (-C)
   changed_when: false
 
 - name: Add port to SELinux ssh_port_t
